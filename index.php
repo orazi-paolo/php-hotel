@@ -60,12 +60,12 @@ $hotels = [
         </h1>
         <!-- faccio una chiamata get sulla stessa pagina -->
         <form method="GET">
-            <label for="parking">Mostra solo hotel con parcheggio:</label>
+            <label for="parking">Show only hotels with parking:</label>
             <!-- controllo se parking c'è se c'è lascio il checked -->
             <input type="checkbox" id="parking" name="parking" class="me-3"
                 <?php if (isset($_GET['parking'])) echo 'checked'; ?>>
 
-            <label for="vote">Voto minimo:</label>
+            <label for="vote">Minimum vote:</label>
             <!-- controllo se c'è la chiamata get con chiave vote se c'è lascio il suo valore senno lascio vuoto -->
             <input type="number" id="vote" name="vote" value="<?php echo isset($_GET['vote']) ? $_GET['vote'] : ''; ?>"
                 min="1" max="5">
