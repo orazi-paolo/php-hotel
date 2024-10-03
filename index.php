@@ -64,15 +64,24 @@ $hotels = [
             <!-- controllo se parking c'è se c'è lascio il checked -->
             <input type="checkbox" id="parking" name="parking" class="me-3"
                 <?php if (isset($_GET['parking'])) echo 'checked'; ?>>
+
+            <label for="vote">Voto minimo:</label>
+            <!-- controllo se c'è la chiamata get con chiave vote se c'è lascio il suo valore senno lascio vuoto -->
+            <input type="number" id="vote" name="vote" value="<?php echo isset($_GET['vote']) ? $_GET['vote'] : ''; ?>"
+                min="1" max="5">
+
             <button type="submit" class="btn btn-primary">Filter</button>
         </form>
     </header>
     <main class="container">
-        <!-- se nella chiamata c'è parking -->
-        <?php if (isset($_GET['parking'])) {
-            // funzione globale array_filter che restituisce i singoli hotel con il parcheggio
+        <!-- se nella chiamata c'è parking e stabilisco il voto minimo -->
+        <?php if (isset($_GET['parking']) || isset($_GET['vote'])) {
             $hotels = array_filter($hotels, function ($hotel) {
-                return $hotel['parking'] === true;
+                // se c'è la chiave parking si prende il suo valore altrimenti non si applica nessun filtro
+                $filter_parking = isset($_GET['parking']) ? $hotel['parking'] : true;
+                // se la chiave vote non è vuota filtra nella variabile hotel solo quelli che hanno il valore di vote maggiore uguale al valore della chiave vote nella chiamata get altrimenti non si pone nessun filtro
+                $filter_vote =  $_GET['vote'] !== '' ? $hotel['vote'] >= (int)$_GET['vote'] : true;
+                return $filter_parking && $filter_vote;
             });
         }
         ?>
@@ -87,6 +96,7 @@ $hotels = [
                 </tr>
             </thead>
             <tbody>
+                <!-- itero nell array hotels in precedenza eventualmente filtrato -->
                 <?php foreach ($hotels as $hotel) { ?>
                     <tr>
                         <th scope="row"><?php echo $hotel['name'] ?></th>
