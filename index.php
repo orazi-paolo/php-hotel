@@ -54,12 +54,28 @@ $hotels = [
 </head>
 
 <body>
-    <header class="container">
-        <h1 class="fw-bold">
+    <header class="container text-center mb-3">
+        <h1 class="fw-bold p-4">
             Php Hotel
         </h1>
+        <!-- faccio una chiamata get sulla stessa pagina -->
+        <form method="GET">
+            <label for="parking">Mostra solo hotel con parcheggio:</label>
+            <!-- controllo se parking c'è se c'è lascio il checked -->
+            <input type="checkbox" id="parking" name="parking" class="me-3"
+                <?php if (isset($_GET['parking'])) echo 'checked'; ?>>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
     </header>
     <main class="container">
+        <!-- se nella chiamata c'è parking -->
+        <?php if (isset($_GET['parking'])) {
+            // funzione globale array_filter che restituisce i singoli hotel con il parcheggio
+            $hotels = array_filter($hotels, function ($hotel) {
+                return $hotel['parking'] === true;
+            });
+        }
+        ?>
         <table class="table table-dark table-hover">
             <thead>
                 <tr>
@@ -86,17 +102,3 @@ $hotels = [
 </body>
 
 </html>
-
-<style>
-    main {
-        position: relative;
-        height: 100vh;
-    }
-
-    table {
-        position: absolute !important;
-        top: 50% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-    }
-</style>
